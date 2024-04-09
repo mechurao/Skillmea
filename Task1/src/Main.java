@@ -11,42 +11,9 @@ public class Main {
             printBoard(board);
             char symbol = isPlayer1 ? 'X' : 'O';
             System.out.println("Player " + (isPlayer1 ? "1" : "2") + " [" + symbol + "] - your turn: ");
-            int row = -1;
-            int col = -1;
 
-            while (true) {
-                System.out.print("Enter row number (1-3): ");
-                if (scanner.hasNextInt()) {
-                    row = scanner.nextInt() - 1;
-                    if (row >= 0 && row < 3) {
-                        break;
-                    } else {
-                        System.out.println("Row number is out of bounds. Please enter a number between 1 and 3.");
-                    }
-                } else {
-                    System.out.println("Invalid input; please enter numbers only.");
-                    scanner.next(); // discard non-integer input
-                }
-            }
-
-            while (true) {
-                System.out.print("Enter column number (1-3): ");
-                if (scanner.hasNextInt()) {
-                    col = scanner.nextInt() - 1;
-                    if (col >= 0 && col < 3) {
-                        if (board[row][col] == ' ') {
-                            break;
-                        } else {
-                            System.out.println("This cell is already occupied. Choose another one.");
-                        }
-                    } else {
-                        System.out.println("Column number is out of bounds. Please enter a number between 1 and 3.");
-                    }
-                } else {
-                    System.out.println("Invalid input; please enter numbers only.");
-                    scanner.next(); // discard non-integer input
-                }
-            }
+            int row = getValidInput(scanner, "row", board, symbol);
+            int col = getValidInput(scanner, "column", board, symbol);
 
             board[row][col] = symbol;
 
@@ -58,16 +25,31 @@ public class Main {
         }
 
         printBoard(board);
-
-        if (hasPlayerWon(board, 'X')) {
-            System.out.println("Player 1 [X] wins!");
-        } else if (hasPlayerWon(board, 'O')) {
-            System.out.println("Player 2 [O] wins!");
-        } else {
-            System.out.println("It's a draw!");
-        }
-
+        declareWinner(board);
         scanner.close();
+    }
+
+    private static int getValidInput(Scanner scanner, String type, char[][] board, char symbol) {
+        int input = -1;
+        while (true) {
+            System.out.print("Enter " + type + " number (1-3): ");
+            if (scanner.hasNextInt()) {
+                input = scanner.nextInt() - 1;
+                if (input >= 0 && input < 3) {
+                    if (type.equals("row") || (type.equals("column") && board[input][input] == ' ')) {
+                        break;
+                    } else {
+                        System.out.println("This cell is already occupied. Choose another one.");
+                    }
+                } else {
+                    System.out.println(type + " number is out of bounds. Please enter a number between 1 and 3.");
+                }
+            } else {
+                System.out.println("Invalid input; please enter numbers only.");
+                scanner.next(); // discard non-integer input
+            }
+        }
+        return input;
     }
 
     private static void printBoard(char[][] board) {
@@ -87,6 +69,7 @@ public class Main {
     }
 
     private static boolean hasPlayerWon(char[][] board, char symbol) {
+        // Check rows and columns
         for (int i = 0; i < 3; i++) {
             if ((board[i][0] == symbol && board[i][1] == symbol && board[i][2] == symbol) ||
                     (board[0][i] == symbol && board[1][i] == symbol && board[2][i] == symbol)) {
@@ -94,6 +77,7 @@ public class Main {
             }
         }
 
+        // Check diagonals
         if ((board[0][0] == symbol && board[1][1] == symbol && board[2][2] == symbol) ||
                 (board[0][2] == symbol && board[1][1] == symbol && board[2][0] == symbol)) {
             return true;
@@ -111,5 +95,15 @@ public class Main {
             }
         }
         return true;
+    }
+
+    private static void declareWinner(char[][] board) {
+        if (hasPlayerWon(board, 'X')) {
+            System.out.println("Player 1 [X] wins!");
+        } else if (hasPlayerWon(board, 'O')) {
+            System.out.println("Player 2 [O] wins!");
+        } else {
+            System.out.println("It's a draw!");
+        }
     }
 }
