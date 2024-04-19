@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class MoreOptQuestion extends  OneOptQuestion{
+public class MoreOptQuestion extends Question {
     MoreOptQuestion(String text, ArrayList<Option> optionsList) {
         super(text, optionsList);
     }
@@ -26,5 +26,4 @@ public class MoreOptQuestion extends  OneOptQuestion{
         }
         return  correctCnt == correctAnswersCnt;
     }
-
 }

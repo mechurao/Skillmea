@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 
-public class OneOptQuestion {
+public class Question {
     private final String text;
     protected final ArrayList<Option> options;
 
-    OneOptQuestion(String text, ArrayList<Option> optionsList) {
+    Question(String text, ArrayList<Option> optionsList) {
         this.text  = text;
         this.options = optionsList;
     }
